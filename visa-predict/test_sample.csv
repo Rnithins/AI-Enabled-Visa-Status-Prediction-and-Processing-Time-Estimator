@@ -1,0 +1,4 @@
+application_date,decision_date,processing_office,fee_paid,processing_days,country_India,country_UK,visa_type_Student,visa_type_Tourist,visa_type_Work
+2024-01-01,2024-02-01,Delhi,200.0,31,True,False,True,False,False
+2024-01-01,2024-03-20,New York,175.0,79,True,False,False,True,False
+2024-03-10,2024-02-01,Delhi,150.0,-38,False,True,False,False,True
