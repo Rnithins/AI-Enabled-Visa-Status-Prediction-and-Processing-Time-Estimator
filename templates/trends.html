@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisaPredictAI | Trends</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body data-page="trends">
+    <div class="aurora"></div>
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="logo" href="{{ url_for('home') }}">
+          <span class="logo-mark">VP</span>
+          VisaPredictAI
+        </a>
+        <nav class="nav">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('estimator') }}">Estimator</a>
+          <a href="{{ url_for('results') }}">Results</a>
+          <a href="{{ url_for('trends') }}">Trends</a>
+        </nav>
+        <a class="btn btn-outline" href="{{ url_for('estimator') }}">Get Estimate</a>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="page-hero">
+        <div class="container">
+          <h1>Trends Dashboard</h1>
+          <p class="lead">Monitor seasonal velocity and country performance.</p>
+        </div>
+      </section>
+
+      <section class="kpi-section">
+        <div class="container kpi-grid">
+          <div class="glass kpi-card">
+            <p>This Month</p>
+            <h3>38 Days</h3>
+            <span class="trend down">down 8%</span>
+          </div>
+          <div class="glass kpi-card">
+            <p>Avg. Wait Time</p>
+            <h3>42 Days</h3>
+            <span class="trend stable">stable</span>
+          </div>
+          <div class="glass kpi-card">
+            <p>Peak Season</p>
+            <h3>Jul - Aug</h3>
+            <span class="trend up">up 15%</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="filters-section">
+        <div class="container glass filters-card">
+          <div class="filters">
+            <div class="field-group">
+              <label for="filterCountry">Country</label>
+              <select id="filterCountry">
+                <option value="all">All</option>
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="filterVisaType">Visa Type</label>
+              <select id="filterVisaType">
+                <option value="all">All</option>
+                <option value="Student">Student</option>
+                <option value="Work">Work</option>
+                <option value="Tourist">Tourist</option>
+                <option value="PR">PR</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="filterYear">Year</label>
+              <select id="filterYear">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="applyFilters">Apply Filters</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="charts-section">
+        <div class="container charts-grid">
+          <div class="glass chart-card">
+            <h3>Monthly Processing Days</h3>
+            <div class="chart-wrapper">
+              <canvas id="monthlyDaysChart"></canvas>
+            </div>
+          </div>
+          <div class="glass chart-card">
+            <h3>Processing Days by Visa Type</h3>
+            <div class="chart-wrapper">
+              <canvas id="visaTypeChart"></canvas>
+            </div>
+          </div>
+          <div class="glass chart-card">
+            <h3>Monthly Application Volume</h3>
+            <div class="chart-wrapper">
+              <canvas id="applicationsChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="insight-section">
+        <div class="container">
+          <div class="glass insight-card">
+            <h3>Insight</h3>
+            <p>
+              July and August represent peak processing pressure, while November
+              and December show consistently faster decisions due to lower
+              application volumes.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="footer-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+                <path
+                  d="M2 12h20M12 2a16 16 0 0 0 0 20M12 2a16 16 0 0 1 0 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+            </span>
+            <strong>VisaPredict<span class="ai-text">AI</span></strong>
+          </div>
+          <p class="footer-text">
+            AI-powered visa processing time predictions based on historical data
+            and machine learning. Make informed decisions about your visa
+            applications.
+          </p>
+        </div>
+        <div class="footer-links-column">
+          <h4>Quick Links</h4>
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('estimator') }}">Estimator</a>
+          <a href="{{ url_for('trends') }}">Trends</a>
+        </div>
+        <div class="footer-links-column">
+          <h4>Contact</h4>
+          <div class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                <path
+                  d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path d="m3 8 9 6 9-6" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </span>
+            <span>support@visapredict.ai</span>
+          </div>
+          <div class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                <path
+                  d="M12 3a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1V8a5 5 0 0 0-5-5Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path d="M8 8a4 4 0 0 1 8 0" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </span>
+            <span>Data Privacy Protected</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 VisaPredictAI. All predictions are estimates based on historical data.</p>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+  </body>
+</html>

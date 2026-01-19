@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisaPredictAI | Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body data-page="results">
+    <div class="aurora"></div>
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="logo" href="{{ url_for('home') }}">
+          <span class="logo-mark">VP</span>
+          VisaPredictAI
+        </a>
+        <nav class="nav">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('estimator') }}">Estimator</a>
+          <a href="{{ url_for('results') }}">Results</a>
+          <a href="{{ url_for('trends') }}">Trends</a>
+        </nav>
+        <a class="btn btn-outline" href="{{ url_for('estimator') }}">New Estimate</a>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="page-hero">
+        <div class="container">
+          <h1>Prediction Results</h1>
+          <p class="lead">
+            Your estimated processing window and timeline insights.
+          </p>
+        </div>
+      </section>
+
+      <section class="results-section">
+        <div class="container results-grid">
+          <div class="glass result-card">
+            <p class="eyebrow">Estimated Processing Time</p>
+            <h2 class="result-range" id="rangeDisplay">--</h2>
+            <p class="result-avg">Best Estimate: <span id="avgDisplay">--</span> Days</p>
+            <div class="confidence">
+              <div class="confidence-label">
+                Confidence <span id="confidenceDisplay">--</span>%
+              </div>
+              <div class="confidence-bar">
+                <div class="confidence-fill" id="confidenceFill"></div>
+              </div>
+            </div>
+            <p class="muted" id="similarApps">--</p>
+            <div class="info-box">
+              <strong>Note:</strong> Processing windows update with seasonal load
+              and office capacity.
+            </div>
+          </div>
+          <div class="glass summary-card">
+            <h3>Summary</h3>
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span>Visa Type</span>
+                <strong id="summaryVisa">--</strong>
+              </div>
+              <div class="summary-item">
+                <span>Route</span>
+                <strong id="summaryRoute">--</strong>
+              </div>
+              <div class="summary-item">
+                <span>Processing Office</span>
+                <strong id="summaryOffice">--</strong>
+              </div>
+              <div class="summary-item">
+                <span>Submitted</span>
+                <strong id="summaryDate">--</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="timeline-section">
+        <div class="container">
+          <div class="glass timeline-card">
+            <h3>Decision Timeline</h3>
+            <div class="timeline">
+              <div class="timeline-step">
+                <span class="dot"></span>
+                <div>
+                  <strong>Application Submitted</strong>
+                  <p id="timelineSubmitted">--</p>
+                </div>
+              </div>
+              <div class="timeline-step">
+                <span class="dot"></span>
+                <div>
+                  <strong>Initial Review</strong>
+                  <p id="timelineReview">--</p>
+                </div>
+              </div>
+              <div class="timeline-step">
+                <span class="dot"></span>
+                <div>
+                  <strong>Processing</strong>
+                  <p id="timelineProcessing">--</p>
+                </div>
+              </div>
+              <div class="timeline-step">
+                <span class="dot"></span>
+                <div>
+                  <strong>Decision Window</strong>
+                  <p id="timelineDecision">--</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="actions-section">
+        <div class="container actions-grid">
+          <div class="glass action-card">
+            <h3>Explore Trends</h3>
+            <p>Compare global processing speeds and peak seasons.</p>
+            <a class="btn btn-primary" href="{{ url_for('trends') }}">Go to Trends</a>
+          </div>
+          <div class="glass action-card">
+            <h3>Run a New Estimate</h3>
+            <p>Try another route or visa type for quick benchmarking.</p>
+            <a class="btn btn-outline" href="{{ url_for('estimator') }}">New Estimate</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="footer-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+                <path
+                  d="M2 12h20M12 2a16 16 0 0 0 0 20M12 2a16 16 0 0 1 0 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                />
+              </svg>
+            </span>
+            <strong>VisaPredict<span class="ai-text">AI</span></strong>
+          </div>
+          <p class="footer-text">
+            AI-powered visa processing time predictions based on historical data
+            and machine learning. Make informed decisions about your visa
+            applications.
+          </p>
+        </div>
+        <div class="footer-links-column">
+          <h4>Quick Links</h4>
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('estimator') }}">Estimator</a>
+          <a href="{{ url_for('trends') }}">Trends</a>
+        </div>
+        <div class="footer-links-column">
+          <h4>Contact</h4>
+          <div class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                <path
+                  d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path d="m3 8 9 6 9-6" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </span>
+            <span>support@visapredict.ai</span>
+          </div>
+          <div class="footer-contact-item">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                <path
+                  d="M12 3a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1V8a5 5 0 0 0-5-5Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path d="M8 8a4 4 0 0 1 8 0" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </span>
+            <span>Data Privacy Protected</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 VisaPredictAI. All predictions are estimates based on historical data.</p>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+</html>
