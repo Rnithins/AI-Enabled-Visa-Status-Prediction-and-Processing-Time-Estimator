@@ -1,4 +1,6 @@
 const formatNumber = (value) => new Intl.NumberFormat("en-US").format(value);
+const axisColor = "rgba(229, 240, 255, 0.78)";
+const gridColor = "rgba(255, 255, 255, 0.08)";
 
 const renderCharts = (data) => {
   if (typeof Chart === "undefined") {
@@ -29,8 +31,8 @@ const renderCharts = (data) => {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: "rgba(255,255,255,0.05)" } },
-        y: { grid: { color: "rgba(255,255,255,0.05)" } }
+        x: { grid: { color: gridColor }, ticks: { color: axisColor } },
+        y: { grid: { color: gridColor }, ticks: { color: axisColor } }
       }
     }
   });
@@ -52,8 +54,8 @@ const renderCharts = (data) => {
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: "rgba(255,255,255,0.05)" } },
-        y: { grid: { color: "rgba(255,255,255,0.05)" } }
+        x: { grid: { color: gridColor }, ticks: { color: axisColor } },
+        y: { grid: { color: gridColor }, ticks: { color: axisColor } }
       }
     }
   });
@@ -83,8 +85,8 @@ const renderCharts = (data) => {
         }
       },
       scales: {
-        x: { grid: { color: "rgba(255,255,255,0.05)" } },
-        y: { grid: { color: "rgba(255,255,255,0.05)" } }
+        x: { grid: { color: gridColor }, ticks: { color: axisColor } },
+        y: { grid: { color: gridColor }, ticks: { color: axisColor } }
       }
     }
   });

@@ -198,8 +198,22 @@ const setupResults = () => {
   );
 };
 
+const setupMobileNav = () => {
+  const toggle = document.querySelector(".nav-toggle");
+  const mobileNav = document.getElementById("mobileNav");
+  if (!toggle || !mobileNav) {
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    const isOpen = mobileNav.classList.toggle("active");
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   setActiveNav();
+  setupMobileNav();
   const page = document.body.dataset.page;
 
   if (page === "estimator") {
