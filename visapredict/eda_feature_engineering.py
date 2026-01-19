@@ -1,6 +1,7 @@
 # AI Enabled Visa Status Prediction and Processing Time Estimator
 # Milestone 2: Exploratory Data Analysis & Feature Engineering
 
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -9,7 +10,9 @@ import seaborn as sns
 sns.set_style("whitegrid")
 
 # 1. Load the cleaned dataset and convert date columns to datetime
-df = pd.read_csv('processed_visa.csv')
+BASE_DIR = os.path.dirname(__file__)
+DATA_PATH = os.path.join(BASE_DIR, "processed_visa.csv")
+df = pd.read_csv(DATA_PATH)
 
 # Convert date columns to datetime
 date_cols = ['application_date', 'biometrics_date', 'decision_date']
@@ -31,7 +34,7 @@ sns.histplot(df['processing_days'], kde=True, bins=50)
 plt.title('Distribution of Processing Days')
 plt.xlabel('Processing Days')
 plt.ylabel('Frequency')
-plt.savefig('processing_days_distribution.png')
+plt.savefig(os.path.join(BASE_DIR, "processing_days_distribution.png"))
 plt.show()
 
 # Boxplot for processing_days (outlier detection)
@@ -52,7 +55,7 @@ plt.title('Processing Days by Visa Type')
 plt.xlabel('Visa Type')
 plt.ylabel('Processing Days')
 plt.xticks(rotation=45)
-plt.savefig('processing_days_by_visa_type.png')
+plt.savefig(os.path.join(BASE_DIR, "processing_days_by_visa_type.png"))
 plt.show()
 
 # Reverse one-hot encoding for applicant_country
@@ -68,7 +71,7 @@ plt.title('Processing Days by Top 10 Applicant Countries')
 plt.xlabel('Applicant Country')
 plt.ylabel('Processing Days')
 plt.xticks(rotation=45)
-plt.savefig('processing_days_by_applicant_country.png')
+plt.savefig(os.path.join(BASE_DIR, "processing_days_by_applicant_country.png"))
 plt.show()
 
 # Seasonal trend of processing_days using application month
@@ -80,7 +83,7 @@ plt.title('Average Processing Days by Application Month')
 plt.xlabel('Application Month')
 plt.ylabel('Average Processing Days')
 plt.xticks(range(1, 13))
-plt.savefig('average_processing_days_by_month.png')
+plt.savefig(os.path.join(BASE_DIR, "average_processing_days_by_month.png"))
 plt.show()
 
 # Application volume per processing_center
@@ -90,7 +93,7 @@ plt.title('Application Volume per Processing Center')
 plt.xlabel('Processing Center')
 plt.ylabel('Number of Applications')
 plt.xticks(rotation=45)
-plt.savefig('application_volume_by_processing_center.png')
+plt.savefig(os.path.join(BASE_DIR, "application_volume_by_processing_center.png"))
 plt.show()
 
 # 4. Identify correlations between numeric features and processing_days
@@ -139,5 +142,6 @@ visa_type_avg = df.groupby('visa_type')['processing_days'].mean()
 df['visa_type_avg_processing'] = df['visa_type'].map(visa_type_avg)
 
 # 6. Save the final feature-engineered dataset
-df.to_csv('visa_eda_features.csv', index=False)
+OUTPUT_PATH = os.path.join(BASE_DIR, "visa_eda_features.csv")
+df.to_csv(OUTPUT_PATH, index=False)
 print("\nFeature-engineered dataset saved as 'visa_eda_features.csv'")
