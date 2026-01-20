@@ -49,8 +49,11 @@
     <main class="main">
       <section class="page-hero">
         <div class="container">
-          <h1>Trends Dashboard</h1>
-          <p class="lead">Monitor seasonal velocity and country performance.</p>
+          <h1>Visa Processing Trends</h1>
+          <p class="lead">
+            Explore historical visa processing data, seasonal patterns, and country-specific
+            insights to plan with confidence.
+          </p>
         </div>
       </section>
 
@@ -58,18 +61,18 @@
         <div class="container kpi-grid">
           <div class="glass kpi-card">
             <p>This Month</p>
-            <h3>38 Days</h3>
-            <span class="trend down">down 8%</span>
+            <h3 id="kpiThisMonth">--</h3>
+            <span class="trend-badge trend-stable">stable</span>
           </div>
           <div class="glass kpi-card">
             <p>Avg. Wait Time</p>
-            <h3>42 Days</h3>
-            <span class="trend stable">stable</span>
+            <h3 id="kpiAvgWait">--</h3>
+            <span class="trend-badge trend-stable">stable</span>
           </div>
           <div class="glass kpi-card">
             <p>Peak Season</p>
-            <h3>Jul - Aug</h3>
-            <span class="trend up">up 15%</span>
+            <h3 id="kpiPeakSeason">--</h3>
+            <span class="trend-badge trend-stable" id="kpiPeakDelta">stable</span>
           </div>
         </div>
       </section>
@@ -81,28 +84,18 @@
               <label for="filterCountry">Country</label>
               <select id="filterCountry">
                 <option value="all">All</option>
-                <option value="United States">United States</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="Canada">Canada</option>
-                <option value="Australia">Australia</option>
               </select>
             </div>
             <div class="field-group">
               <label for="filterVisaType">Visa Type</label>
               <select id="filterVisaType">
                 <option value="all">All</option>
-                <option value="Student">Student</option>
-                <option value="Work">Work</option>
-                <option value="Tourist">Tourist</option>
-                <option value="PR">PR</option>
               </select>
             </div>
             <div class="field-group">
               <label for="filterYear">Year</label>
               <select id="filterYear">
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
+                <option value="all">All</option>
               </select>
             </div>
             <button class="btn btn-primary" id="applyFilters">Apply Filters</button>
@@ -113,19 +106,37 @@
       <section class="charts-section">
         <div class="container charts-grid">
           <div class="glass chart-card">
-            <h3>Monthly Processing Days</h3>
+            <div class="chart-title">
+              <h3>Seasonal Processing Times</h3>
+              <p>Average processing days by month</p>
+            </div>
             <div class="chart-wrapper">
               <canvas id="monthlyDaysChart"></canvas>
             </div>
           </div>
           <div class="glass chart-card">
-            <h3>Processing Days by Visa Type</h3>
+            <div class="chart-title">
+              <h3>Processing Time by Country</h3>
+              <p>Average days for top applicant countries</p>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="countryChart"></canvas>
+            </div>
+          </div>
+          <div class="glass chart-card">
+            <div class="chart-title">
+              <h3>Processing Time by Visa Type</h3>
+              <p>Average days for each visa category</p>
+            </div>
             <div class="chart-wrapper">
               <canvas id="visaTypeChart"></canvas>
             </div>
           </div>
           <div class="glass chart-card">
-            <h3>Monthly Application Volume</h3>
+            <div class="chart-title">
+              <h3>Application Volume</h3>
+              <p>Monthly application submissions</p>
+            </div>
             <div class="chart-wrapper">
               <canvas id="applicationsChart"></canvas>
             </div>
@@ -136,11 +147,13 @@
       <section class="insight-section">
         <div class="container">
           <div class="glass insight-card">
-            <h3>Insight</h3>
+            <h3>Key Insight</h3>
             <p>
-              July and August represent peak processing pressure, while November
-              and December show consistently faster decisions due to lower
-              application volumes.
+              Based on historical data, <span class="accent-text">July and August</span>
+              typically see the longest processing times due to peak travel season.
+              Consider submitting applications in
+              <span class="accent-text">November and December</span> for potentially
+              faster processing.
             </p>
           </div>
         </div>
@@ -213,6 +226,10 @@
       </div>
     </footer>
 
+    <script>
+      window.trendsOptions = {{ trends_options | tojson }};
+      window.trendsData = {{ trends_data | tojson }};
+    </script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
   </body>

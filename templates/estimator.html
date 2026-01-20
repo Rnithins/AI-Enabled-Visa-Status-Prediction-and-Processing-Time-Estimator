@@ -65,42 +65,25 @@
                 <label for="visaType">Visa Type</label>
                 <select id="visaType" name="visaType" required>
                   <option value="">Select visa type</option>
-                  <option value="Student">Student</option>
-                  <option value="Work">Work</option>
-                  <option value="Tourist">Tourist</option>
-                  <option value="PR">PR</option>
                 </select>
+                <p class="muted" id="visaTypeNote"></p>
               </div>
               <div class="field-group">
                 <label for="applicantCountry">Applicant Country</label>
                 <select id="applicantCountry" name="applicantCountry" required>
                   <option value="">Select applicant country</option>
-                  <option value="India">India</option>
-                  <option value="UK">UK</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                  <option value="Australia">Australia</option>
                 </select>
               </div>
               <div class="field-group">
                 <label for="destinationCountry">Destination Country</label>
                 <select id="destinationCountry" name="destinationCountry" required>
                   <option value="">Select destination country</option>
-                  <option value="United States">United States</option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="Canada">Canada</option>
-                  <option value="Australia">Australia</option>
                 </select>
               </div>
               <div class="field-group">
                 <label for="embassy">Processing Office</label>
                 <select id="embassy" name="embassy" required>
                   <option value="">Select processing office</option>
-                  <option value="New Delhi">New Delhi</option>
-                  <option value="London">London</option>
-                  <option value="Sydney">Sydney</option>
-                  <option value="Toronto">Toronto</option>
-                  <option value="New York">New York</option>
                 </select>
               </div>
               <div class="field-group">
@@ -301,6 +284,9 @@
       </div>
     </footer>
 
+    <script>
+      window.formOptions = {{ form_options | tojson }};
+    </script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </body>
 </html>

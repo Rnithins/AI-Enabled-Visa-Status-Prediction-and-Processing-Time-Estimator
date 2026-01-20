@@ -48,12 +48,58 @@ const hideError = (banner) => {
   banner.classList.add("hidden");
 };
 
+const populateSelect = (select, options, placeholder) => {
+  if (!select) {
+    return;
+  }
+  select.innerHTML = "";
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = placeholder;
+  select.appendChild(placeholderOption);
+
+  options.forEach((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  });
+};
+
+const setSelectNote = (noteEl, message) => {
+  if (!noteEl) {
+    return;
+  }
+  noteEl.textContent = message || "";
+};
+
+const fetchFormOptions = async (params = {}) => {
+  const url = new URL("/form-options", window.location.origin);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      url.searchParams.set(key, value);
+    }
+  });
+
+  const response = await fetch(url.toString());
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || "Unable to load form options.");
+  }
+  return data;
+};
+
 const setupEstimator = () => {
   const form = document.getElementById("visa-form");
   if (!form) {
     return;
   }
 
+  const visaTypeSelect = document.getElementById("visaType");
+  const applicantCountrySelect = document.getElementById("applicantCountry");
+  const destinationCountrySelect = document.getElementById("destinationCountry");
+  const processingOfficeSelect = document.getElementById("embassy");
+  const visaTypeNote = document.getElementById("visaTypeNote");
   const submitBtn = document.getElementById("estimateBtn");
   const overlay = document.getElementById("loadingOverlay");
   const errorBanner = document.getElementById("formError");
@@ -75,14 +121,133 @@ const setupEstimator = () => {
   const fields = Array.from(form.querySelectorAll("input, select"));
 
   const validate = () => {
-    const filled = fields.every((field) => field.value.trim() !== "");
+    const filled = fields.every(
+      (field) => field.disabled || field.value.trim() !== ""
+    );
     submitBtn.disabled = !filled;
+  };
+
+  const setSelectDisabled = (select, noteEl, message) => {
+    if (!select) {
+      return;
+    }
+    select.disabled = true;
+    setSelectNote(noteEl, message);
+  };
+
+  const setSelectEnabled = (select, noteEl) => {
+    if (!select) {
+      return;
+    }
+    select.disabled = false;
+    setSelectNote(noteEl, "");
+  };
+
+  const loadBaseOptions = async () => {
+    const initialOptions = window.formOptions || null;
+    if (initialOptions) {
+      populateSelect(
+        applicantCountrySelect,
+        initialOptions.applicant_countries,
+        "Select applicant country"
+      );
+      populateSelect(
+        destinationCountrySelect,
+        initialOptions.destination_countries,
+        "Select destination country"
+      );
+      populateSelect(
+        processingOfficeSelect,
+        initialOptions.processing_offices,
+        "Select processing office"
+      );
+      populateSelect(
+        visaTypeSelect,
+        initialOptions.visa_types,
+        "Select visa type"
+      );
+      if (initialOptions.visa_types.length) {
+        setSelectEnabled(visaTypeSelect, visaTypeNote);
+      }
+    }
+
+    if (!initialOptions) {
+      populateSelect(visaTypeSelect, [], "Select visa type");
+      setSelectDisabled(
+        visaTypeSelect,
+        visaTypeNote,
+        "Loading visa types..."
+      );
+    }
+
+    try {
+      const data = await fetchFormOptions();
+      populateSelect(
+        applicantCountrySelect,
+        data.options.applicant_countries,
+        "Select applicant country"
+      );
+      populateSelect(
+        destinationCountrySelect,
+        data.options.destination_countries,
+        "Select destination country"
+      );
+      populateSelect(
+        processingOfficeSelect,
+        data.options.processing_offices,
+        "Select processing office"
+      );
+      populateSelect(visaTypeSelect, data.options.visa_types, "Select visa type");
+      if (data.options.visa_types.length) {
+        setSelectEnabled(visaTypeSelect, visaTypeNote);
+      } else {
+        setSelectDisabled(visaTypeSelect, visaTypeNote, "No visa types available.");
+      }
+    } catch (error) {
+      if (!initialOptions) {
+        throw error;
+      }
+    }
+  };
+
+  const updateVisaTypes = async () => {
+    const destination = destinationCountrySelect?.value.trim();
+
+    const data = await fetchFormOptions(
+      destination ? { destination_country: destination } : {}
+    );
+    populateSelect(
+      visaTypeSelect,
+      data.options.visa_types,
+      "Select visa type"
+    );
+    if (data.options.visa_types.length) {
+      setSelectEnabled(visaTypeSelect, visaTypeNote);
+    } else {
+      setSelectDisabled(
+        visaTypeSelect,
+        visaTypeNote,
+        "No visa types available for the selected destination country."
+      );
+    }
+    validate();
   };
 
   fields.forEach((field) => {
     field.addEventListener("input", validate);
     field.addEventListener("change", validate);
   });
+
+  if (destinationCountrySelect) {
+    destinationCountrySelect.addEventListener("change", async () => {
+      hideError(errorBanner);
+      try {
+        await updateVisaTypes();
+      } catch (error) {
+        showError(errorBanner, error.message);
+      }
+    });
+  }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -150,7 +315,9 @@ const setupEstimator = () => {
     }
   });
 
-  validate();
+  loadBaseOptions()
+    .then(() => validate())
+    .catch((error) => showError(errorBanner, error.message));
 };
 
 const setupResults = () => {
