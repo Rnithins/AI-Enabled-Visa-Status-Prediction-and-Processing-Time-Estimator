@@ -472,8 +472,8 @@ def predict():
     except ValueError:
         return jsonify({"error": "submission_date must be in YYYY-MM-DD format."}), 400
 
-    model, metadata = _get_model_bundle()
     try:
+        model, metadata = _get_model_bundle()
         features = build_feature_vector(payload, metadata)
         prediction = float(model.predict(features)[0])
     except Exception as exc:

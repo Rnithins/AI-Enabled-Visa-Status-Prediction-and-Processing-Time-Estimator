@@ -9,6 +9,12 @@ from sklearn.ensemble import RandomForestRegressor
 
 TARGET_COLUMN = "processing_days"
 MODEL_NAME = "RandomForestRegressor"
+MODEL_MAX_BYTES = int(os.environ.get("MODEL_MAX_BYTES", "200000000"))
+MODEL_FORCE_REBUILD = os.environ.get("MODEL_FORCE_REBUILD", "").lower() in {
+    "1",
+    "true",
+    "yes",
+}
 
 
 def _load_dataset() -> pd.DataFrame:
@@ -40,19 +46,35 @@ def _train_model(df: pd.DataFrame, feature_cols) -> RandomForestRegressor:
     X = df[feature_cols].fillna(df[feature_cols].mean())
     y = df[TARGET_COLUMN]
     model = RandomForestRegressor(
-        n_estimators=120,
+        n_estimators=80,
         random_state=42,
         n_jobs=-1,
+        max_depth=12,
+        min_samples_leaf=10,
+        min_samples_split=20,
     )
     model.fit(X, y)
     return model
 
 
-def ensure_artifacts(model_dir: str) -> Tuple[str, str]:
+def _should_rebuild(model_path: str, metadata_path: str, force_rebuild: bool) -> bool:
+    if force_rebuild or MODEL_FORCE_REBUILD:
+        return True
+    if not (os.path.exists(model_path) and os.path.exists(metadata_path)):
+        return True
+    if MODEL_MAX_BYTES <= 0:
+        return False
+    try:
+        return os.path.getsize(model_path) > MODEL_MAX_BYTES
+    except OSError:
+        return True
+
+
+def ensure_artifacts(model_dir: str, force_rebuild: bool = False) -> Tuple[str, str]:
     model_path = os.path.join(model_dir, "visa_model.pkl")
     metadata_path = os.path.join(model_dir, "metadata.json")
 
-    if os.path.exists(model_path) and os.path.exists(metadata_path):
+    if not _should_rebuild(model_path, metadata_path, force_rebuild):
         return model_path, metadata_path
 
     os.makedirs(model_dir, exist_ok=True)
@@ -69,7 +91,11 @@ def ensure_artifacts(model_dir: str) -> Tuple[str, str]:
 
 def load_model_and_metadata(model_dir: str):
     model_path, metadata_path = ensure_artifacts(model_dir)
-    model = joblib.load(model_path)
+    try:
+        model = joblib.load(model_path)
+    except Exception:
+        model_path, metadata_path = ensure_artifacts(model_dir, force_rebuild=True)
+        model = joblib.load(model_path)
     with open(metadata_path, "r", encoding="utf-8") as handle:
         metadata = json.load(handle)
     return model, metadata
