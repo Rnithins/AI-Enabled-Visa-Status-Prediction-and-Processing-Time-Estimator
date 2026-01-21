@@ -7,6 +7,18 @@ let visaTypeChart = null;
 let applicationsChart = null;
 let countryChart = null;
 
+const parseJsonResponse = async (response) => {
+  const text = (await response.text()).trim();
+  if (!text) {
+    return null;
+  }
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error("Invalid server response.");
+  }
+};
+
 const populateTrendsSelect = (select, options, placeholder) => {
   if (!select) {
     return;
@@ -397,7 +409,10 @@ const loadTrends = async (filters = {}) => {
     if (!response.ok) {
       throw new Error("Unable to load trend data.");
     }
-    const data = await response.json();
+    const data = await parseJsonResponse(response);
+    if (!data) {
+      throw new Error("Unable to load trend data.");
+    }
     renderCharts(data);
   } catch (error) {
     if (window.trendsData && window.trendsData.months?.length) {
@@ -434,7 +449,10 @@ const loadTrendsOptions = async () => {
     if (!response.ok) {
       throw new Error("Unable to load filter options.");
     }
-    const data = await response.json();
+    const data = await parseJsonResponse(response);
+    if (!data) {
+      throw new Error("Unable to load filter options.");
+    }
     populateTrendsSelect(countrySelect, data.countries, {
       value: "all",
       label: "All"

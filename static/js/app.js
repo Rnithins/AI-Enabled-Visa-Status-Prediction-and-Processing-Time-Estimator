@@ -73,6 +73,18 @@ const setSelectNote = (noteEl, message) => {
   noteEl.textContent = message || "";
 };
 
+const parseJsonResponse = async (response) => {
+  const text = (await response.text()).trim();
+  if (!text) {
+    return null;
+  }
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error("Invalid server response.");
+  }
+};
+
 const fetchFormOptions = async (params = {}) => {
   const url = new URL("/form-options", window.location.origin);
   Object.entries(params).forEach(([key, value]) => {
@@ -82,9 +94,12 @@ const fetchFormOptions = async (params = {}) => {
   });
 
   const response = await fetch(url.toString());
-  const data = await response.json();
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    throw new Error(data.error || "Unable to load form options.");
+    throw new Error((data && data.error) || "Unable to load form options.");
+  }
+  if (!data) {
+    throw new Error("Unable to load form options.");
   }
   return data;
 };
@@ -271,9 +286,12 @@ const setupEstimator = () => {
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
       if (!response.ok) {
-        throw new Error(data.error || "Prediction failed. Please try again.");
+        throw new Error((data && data.error) || "Prediction failed. Please try again.");
+      }
+      if (!data) {
+        throw new Error("Prediction failed. Please try again.");
       }
 
       localStorage.setItem("visaFormData", JSON.stringify(payload));
