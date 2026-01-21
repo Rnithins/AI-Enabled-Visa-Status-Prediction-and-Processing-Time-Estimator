@@ -227,8 +227,8 @@
     </footer>
 
     <script>
-      window.trendsOptions = {{ trends_options | tojson }};
-      window.trendsData = {{ trends_data | tojson }};
+      window.trendsOptions = {{ trends_options | default({}, true) | tojson }};
+      window.trendsData = {{ trends_data | default([], true) | tojson }};
     </script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
